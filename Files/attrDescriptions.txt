@@ -1,0 +1,53 @@
+[
+	{   "ID" : "7",
+		"ValDesc" : [
+								{"Value":"1","Desc":"No Shoulder"},
+								{"Value":"2","Desc":"Bituminous"},
+								{"Value":"3","Desc":"Portland"},
+								{"Value":"4","Desc":"Stabilized"},
+								{"Value":"5","Desc":"Combination"},
+								{"Value":"6","Desc":"Earth"},
+								{"Value":"7","Desc":"Curbed"}
+			]
+	},
+	{ 	"ID" : "5",
+		"ValDesc" :[
+								{"Value":"1","Desc":"None"},
+								{"Value":"11","Desc":"Level - Striped"},	
+								{"Value":"12","Desc":"Painted - No Vehicles"},
+								{"Value":"13","Desc":"Parking"},							
+								{"Value":"14","Desc":"Level - Box Beam"},
+								{"Value":"16","Desc":"Level - Guard Rail"},
+								{"Value":"17","Desc":"Level - Box Beam/Fence"},
+								{"Value":"19","Desc":"Level - Concrete"},
+								{"Value":"21","Desc":"Depressed"},
+								{"Value":"22","Desc":"Depressed - Fence"},
+								{"Value":"23","Desc":"Depressed - Box Beam"},
+								{"Value":"24","Desc":"Depressed - Guard Rail"},
+								{"Value":"27","Desc":"Depressed - Concrete"},
+								{"Value":"31","Desc":"Raised (no curb)"},
+								{"Value":"37","Desc":"Raised - Concrete"},
+								{"Value":"41","Desc":"Raised Curb"},
+								{"Value":"44","Desc":"Raised Curb - Guard Rail"},								
+								{"Value":"47","Desc":"Raised Curb - Concrete"},
+								{"Value":"52","Desc":"Channelized - Raised Curb"},
+								{"Value":"54","Desc":"Channelized - Painted"},
+								{"Value":"55","Desc":"HOV Reversible"}
+				]						
+	},
+	{ 	"ID" : "2",
+		"ValDesc" :[
+								{"Value":"1","Desc":"Interstate-Rural"},
+								{"Value":"2","Desc":"Other Pri Art-Rural"},
+								{"Value":"6","Desc":"Minor Art-Rural"},
+								{"Value":"7","Desc":"Major Collector-Rural"},
+								{"Value":"8","Desc":"Minor Collector-Rural"},
+								{"Value":"9","Desc":"Local-Rural"},
+								{"Value":"11","Desc":"Interstate-Urban"},
+								{"Value":"12","Desc":"Freeway-Urban"},
+								{"Value":"14","Desc":"Other Pri Art-Urban"},
+								{"Value":"16","Desc":"Minor Art-Urban"},
+								{"Value":"17","Desc":"Major Collector-Urban"}
+				]
+   }
+]
