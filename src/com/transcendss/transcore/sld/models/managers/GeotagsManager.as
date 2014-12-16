@@ -203,7 +203,9 @@ package com.transcendss.transcore.sld.models.managers
 					} else
 					{
 						if(FlexGlobals.topLevelApplication.platform == "IOS") {
-							loaderPath = "app-storage:/" + gtURL2+ tmpGT.voice_file_name;
+							// Temporary code for demo. TODO:
+							loaderPath = gtURL2+ tmpGT.voice_file_name;
+							//loaderPath = "app-storage:/" + gtURL2+ tmpGT.voice_file_name;
 						} else {
 							loaderPath = gtURL2+ tmpGT.voice_file_name;
 						}
