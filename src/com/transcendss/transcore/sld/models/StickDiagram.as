@@ -102,6 +102,7 @@ package com.transcendss.transcore.sld.models
 			ruler = new Ruler();
 			
 			fruler = new MeasureBar();
+			
 			// init rte mkrs
 			routeMkrs = new RouteMarkers();
 			//init view mile markers
@@ -181,7 +182,7 @@ package com.transcendss.transcore.sld.models
 			if(FlexGlobals.topLevelApplication.GlobalComponents.ConfigManager.feetMarkerSwitch )
 				layerArray.push({layer:ruler, order:100, layerIndex:0});
 			
-			fruler.draw(height,_gBarX*2,_gBarX,diagramScale,FlexGlobals.topLevelApplication.GlobalComponents.ConfigManager.measureBarUnit);
+			fruler.draw(height,_gBarX*2,_gBarX,diagramScale,FlexGlobals.topLevelApplication.GlobalComponents.ConfigManager.dataUnits, FlexGlobals.topLevelApplication.GlobalComponents.ConfigManager.measureBarUnit);
 			if(FlexGlobals.topLevelApplication.GlobalComponents.ConfigManager.feetMarkerSwitch )
 				layerArray.push({layer:fruler, order:100, layerIndex:0});
 			
@@ -967,7 +968,7 @@ package com.transcendss.transcore.sld.models
 			if (this.getChildByName("MeasureBar") != null)
 			{
 				this.removeChild(this.getChildByName("MeasureBar"));
-				fruler.draw(height,_gBarX*2,_gBarX,diagramScale,newUnit);
+				fruler.draw(height,_gBarX*2,_gBarX,diagramScale,FlexGlobals.topLevelApplication.GlobalComponents.ConfigManager.dataUnits, newUnit);
 				addFeature(fruler, 100);
 			}
 		}

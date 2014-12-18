@@ -1,13 +1,15 @@
 package com.transcendss.transcore.sld.models.components
 {
-	import com.transcendss.transcore.util.*;
+	import com.transcendss.transcore.util.Converter;
+	import com.transcendss.transcore.util.Units;
 	
 	import flash.display.BitmapData;
 	import flash.display.Shape;
 	import flash.display.Sprite;
 	import flash.filters.GlowFilter;
-	import flash.text.*;
-	import flash.text.engine.*;
+	import flash.text.TextField;
+	import flash.text.TextFieldAutoSize;
+	import flash.text.TextFormat;
 	
 	import mx.core.UIComponent;
 	
@@ -21,16 +23,28 @@ package com.transcendss.transcore.sld.models.components
 		private var zeroPos:Number;
 		private var ruler:Sprite = new Sprite();
 		
+		private var _dataUnit:Number;
+		private var _measureDictionary:Object;
+		
 		
 		public function MeasureBar(mkLen:int=10)
 		{
 			clearContainer();
 			name = "MeasureBar";
 			markerPxLength = mkLen;
+			
+			_measureDictionary = new Object();
+			_measureDictionary[1] = 1.0; //Mile
+			_measureDictionary[2] = 1.60934; // Kilometer
+			_measureDictionary[3] = 1.0; // COUNTY Mile
+			_measureDictionary[4] = 5280.0; // Foot
+			_measureDictionary[5] = 1609.34; // Meter
 		}
-	
-		public function draw(diagramH:Number, diagramW:Number,guideBarX:Number, diagramScale:Number, units:int=4):void{
+
+		public function draw(diagramH:Number, diagramW:Number,guideBarX:Number, diagramScale:Number, dataUnits:int, units:int):void{
 			clearContainer();  // must clear to draw/redraw
+			
+			_dataUnit = dataUnits;
 			
 			var rIntrvl:Number = 1;
 			var rIntOffset:Number = 0;
@@ -123,7 +137,6 @@ package com.transcendss.transcore.sld.models.components
 			var measureInMiles:Number = Converter.convertToMile(measure, units);
 			var pxPerMeasure:Number =Converter.scaleMileToPixel(measureInMiles,diagramScale);
 			
-			
 			var mkrCnt:int = 11;
 			
 			var centerPx:Number =rulerWidth/2;//center 		
@@ -142,8 +155,8 @@ package com.transcendss.transcore.sld.models.components
 				vCmds.push(2);
 				vData.push(markerPos);
 				vData.push(startY-markerLength);
-				feet= Converter.convertFromMile( Converter.scalePixelToMile(pxPerMeasure,diagramScale),units) * i; //convert from pixel to mile and then to the measure
-				feet= (Number)( feet.toFixed(2));
+				//feet= Converter.convertFromMile( Converter.scalePixelToMile(pxPerMeasure,diagramScale),units) * i; //convert from pixel to mile and then to the measure
+				feet= createMeasureStamp(diagramScale, units) * i; //(Number)( feet.toFixed(2));
 				vText.push(feet);
 				/*if((feet*100)%100 ==0)
 					vText.push(feet.toFixed(0));
@@ -230,6 +243,12 @@ package com.transcendss.transcore.sld.models.components
 			}
 			return -1;
 			
+		}
+		
+		private function createMeasureStamp(scale:Number, units:Number):Number
+		{
+			var value:Number = scale * _measureDictionary[units] / _measureDictionary[_dataUnit];
+			return Number(value.toFixed(2));
 		}
 		
 	}
