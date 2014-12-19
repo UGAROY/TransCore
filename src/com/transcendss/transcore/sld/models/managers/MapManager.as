@@ -5,10 +5,9 @@ package com.transcendss.transcore.sld.models.managers
 	import com.google.maps.MapType;
 	import com.google.maps.View;
 	import com.google.maps.geom.Attitude;
-	import com.transcendss.transcore.events.*;
+	import com.transcendss.transcore.events.MapInitEvent;
 	import com.transcendss.transcore.util.PolarToUTM;
 	
-	import flash.events.*;
 	import flash.events.IEventDispatcher;
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
@@ -73,9 +72,24 @@ package com.transcendss.transcore.sld.models.managers
 				trace(ac.getItemAt(t)["X"] + "," + ac.getItemAt(t)["Y"]);
 			}*/
 //			var mapSR:String = BaseConfigUtility.get("basemapSR");
+			
+			
 			var mapSR:String = FlexGlobals.topLevelApplication.GlobalComponents.ConfigManager.baseMapSR;
-			var pUTM:PolarToUTM = new PolarToUTM();
-			ac = pUTM.routeCoordsToUTM(ac);
+			if (mapSR == "4623")
+			{
+				// TODO: USE THE NEW ROUTECOORDS structure
+				var pUTM:PolarToUTM = new PolarToUTM();
+				ac = pUTM.routeCoordsToUTM(ac);
+			}
+			else
+			{
+				for each (var coord:Object in ac)
+				{
+					coord.utmX = coord.X;
+					coord.utmY = coord.Y;
+				}
+			}
+			
 			/*if (mapSR != "4623")
 			{
 				projCounter = 0;

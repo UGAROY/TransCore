@@ -156,7 +156,7 @@ package com.transcendss.transcore.sld.models.components
 				vData.push(markerPos);
 				vData.push(startY-markerLength);
 				//feet= Converter.convertFromMile( Converter.scalePixelToMile(pxPerMeasure,diagramScale),units) * i; //convert from pixel to mile and then to the measure
-				feet= createMeasureStamp(diagramScale, units) * i; //(Number)( feet.toFixed(2));
+				feet= createMeasureStamp(diagramScale, units, i); //(Number)( feet.toFixed(2));
 				vText.push(feet);
 				/*if((feet*100)%100 ==0)
 					vText.push(feet.toFixed(0));
@@ -245,10 +245,10 @@ package com.transcendss.transcore.sld.models.components
 			
 		}
 		
-		private function createMeasureStamp(scale:Number, units:Number):Number
+		private function createMeasureStamp(scale:Number, units:Number, index:Number):Number
 		{
-			var value:Number = scale * _measureDictionary[units] / _measureDictionary[_dataUnit];
-			return Number(value.toFixed(2));
+			var value:Number = scale * _measureDictionary[units] / _measureDictionary[_dataUnit] * index;
+			return parseFloat(value.toFixed(2));
 		}
 		
 	}
