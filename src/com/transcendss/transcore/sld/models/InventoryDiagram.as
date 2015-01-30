@@ -668,8 +668,8 @@ package com.transcendss.transcore.sld.models
 					var newData:Array = new Array();
 					for(var k:int=0; k<dataArr.length;k++)
 					{
-						var bgP:Number = new  Number(dataArr[k].REFPT);
-						var endP:Number = new Number(dataArr[k].ENDREFPT);
+						var bgP:Number = new  Number(dataArr[k].FROMMEASURE);
+						var endP:Number = new Number(dataArr[k].TOMEASURE);
 						if((bgP>=begMile && bgP<= endMile) || (endP >= begMile && endP <=endMile))
 							newData.push(dataArr[k]);
 						

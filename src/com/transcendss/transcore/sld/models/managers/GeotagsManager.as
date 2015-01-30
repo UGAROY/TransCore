@@ -269,6 +269,8 @@ package com.transcendss.transcore.sld.models.managers
 				
 				if(gtArray[gti].ID)
 					id = String(gtArray[gti].ID);
+				if(gtArray[gti].id)
+					id = String(gtArray[gti].id);
 				else
 					id = String(gtArray[gti].ATTACH_ID);
 				
@@ -301,10 +303,15 @@ package com.transcendss.transcore.sld.models.managers
 				var viE:*= ConvertGeotags(tmpGT,url );
 				if(viE)
 				{
-					if(insp==0 && attachmentGroup) 
-						attachmentGroup.addElement(viE);
-					else if(insp==1 && inspGroup)
+//					if(insp==0 && attachmentGroup) 
+//						attachmentGroup.addElement(viE);
+//					else if(insp==1 && inspGroup)
+//						inspGroup.addElement(viE);
+					
+					if(inspGroup)
 						inspGroup.addElement(viE);
+					else if(insp==0 && attachmentGroup) 
+						attachmentGroup.addElement(viE);
 				}
 				
 			}

@@ -70,6 +70,7 @@ package com.transcendss.transcore.sld.models.managers
 		 */
 		public function requestAssets(type:String,  responder:IResponder):void
 		{
+			FlexGlobals.topLevelApplication.incrementEventStack();
 			_event = new FeatureEvent(FeatureEvent.ASSET_REQUEST, type);
 			_event.routeName = _route.routeName;
 			_event.begMile = _route.beginMi;
@@ -396,6 +397,16 @@ package com.transcendss.transcore.sld.models.managers
 			_assetDefs = value;
 		}
 		
+		public function get barElementDefs():Object
+		{
+			return _barElementDefs;
+		}
+		
+		public function set barElementDefs(value:Object):void
+		{
+			_barElementDefs = value;
+		}
+		
 		public function get assetDescriptions():Object
 		{
 			return _assetDescriptions;
@@ -404,6 +415,16 @@ package com.transcendss.transcore.sld.models.managers
 		public function set assetDescriptions(value:Object):void
 		{
 			_assetDescriptions = value;
+		}
+		
+		public function get barElementDescriptions():Object
+		{
+			return _barElementDescriptions;
+		}
+		
+		public function set barElementDescriptions(value:Object):void
+		{
+			_barElementDescriptions = value;
 		}
 	}
 }

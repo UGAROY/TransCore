@@ -256,7 +256,7 @@ package com.transcendss.transcore.sld.models
 			var ftEvent:RouteGeotagEvent;
 			dispatcher = new Dispatcher();
 			//if connected call service and obtain array of geotags on the route (unattached to culvert)
-			if(!fromStorage)
+			if(!fromStorage && !FlexGlobals.topLevelApplication.useAgsService  )
 			{
 				ftEvent = new RouteGeotagEvent( RouteGeotagEvent.ROUTE_GEOTAG_REQUESTED,true);
 				ftEvent.serviceURL = FlexGlobals.topLevelApplication.GlobalComponents.ConfigManager.serviceURL +"RouteGeotags/"+this.route.routeName+"/"+this.route.beginMi+"/"+this.route.endMi;
@@ -458,7 +458,6 @@ package com.transcendss.transcore.sld.models
 					for (var prop:String in assetMan.assetDescriptions) 
 					{
 						assetMan.requestAssets(prop, resp);
-						FlexGlobals.topLevelApplication.incrementEventStack();
 					}
 					
 					
@@ -1233,6 +1232,7 @@ package com.transcendss.transcore.sld.models
 				{
 					var sprasset:AssetSymbol = layer.getChildAt(i) as AssetSymbol;
 					var jsonObj:Object = sprasset.baseAsset.toDynamicObject();
+					
 					typeArray.push(jsonObj);
 				}
 				

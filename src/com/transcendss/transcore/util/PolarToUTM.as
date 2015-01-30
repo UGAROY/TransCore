@@ -481,7 +481,7 @@ package com.transcendss.transcore.util
 			
 			if (isNaN (long)) {
 				trace ("Please enter a valid longitude in the lon field.");
-				return false;
+				return {x:latt, y:long};
 			}
 			
 			var lon:Number = long;
@@ -489,12 +489,12 @@ package com.transcendss.transcore.util
 			if ((lon < -180.0) || (180.0 <= lon)) {
 				trace ("The longitude you entered is out of range.  " +
 					"Please enter a number in the range [-180, 180).");
-				return false;
+				return {x:latt, y:long};
 			}
 			
 			if (isNaN (latt)) {
 				trace ("Please enter a valid latitude in the lat field.");
-				return false;
+				return {x:latt, y:long};
 			}
 			
 			var lat:Number = latt;
@@ -502,7 +502,7 @@ package com.transcendss.transcore.util
 			if ((lat < -90.0) || (90.0 < lat)) {
 				trace ("The latitude you entered is out of range.  " +
 					"Please enter a number in the range [-90, 90].");
-				return false;
+				return {x:latt, y:long};
 			}
 			
 			// Compute the UTM zone.
@@ -565,9 +565,12 @@ package com.transcendss.transcore.util
 			{
 				var nObj:Object = ObjectUtil.clone(obj);
 				var trans:Object = latlongToUTM(nObj.Y, nObj.X);
-				nObj.utmX = trans.x;
-				nObj.utmY = trans.y;
-				nObj.utmZone = trans.zone;
+				if(trans)
+				{
+					nObj.utmX = trans.x;
+					nObj.utmY = trans.y;
+					nObj.utmZone = trans.zone;
+				}
 				retCoords.addItem(nObj);
 			}
 			
