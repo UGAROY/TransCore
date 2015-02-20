@@ -412,6 +412,20 @@ package com.transcendss.transcore.sld.models.managers
 			return _assetDescriptions;
 		}
 		
+		
+		public function getAssetUINameByType(typ:String):String
+		{
+			
+			for each ( var asset in assetDefs)
+			{
+				if(asset.ASSET_TYPE == typ)
+					return asset.UI_NAME;
+			}
+				
+				
+			return "";
+		}
+		
 		public function set assetDescriptions(value:Object):void
 		{
 			_assetDescriptions = value;

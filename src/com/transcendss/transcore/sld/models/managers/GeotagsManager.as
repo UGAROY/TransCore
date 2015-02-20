@@ -20,6 +20,8 @@ package com.transcendss.transcore.sld.models.managers
 	import mx.core.FlexGlobals;
 	
 	import spark.components.Group;
+	import spark.components.Label;
+	import spark.components.VGroup;
 	
 	public class GeotagsManager
 	{
@@ -308,10 +310,17 @@ package com.transcendss.transcore.sld.models.managers
 //					else if(insp==1 && inspGroup)
 //						inspGroup.addElement(viE);
 					
+					var vContainer:VGroup = new VGroup();
+					vContainer.horizontalAlign = "center";
+					var assetLabel:Label = new Label();
+					assetLabel.text = (assetType =="SIGN")?"Sign -- "+assetID:FlexGlobals.topLevelApplication.GlobalComponents.assetManager.getAssetUINameByType(assetType) + "--" + assetID;
+					vContainer.addElement(viE);
+					vContainer.addElement(assetLabel);
+					
 					if(inspGroup)
-						inspGroup.addElement(viE);
+						inspGroup.addElement(vContainer);
 					else if(insp==0 && attachmentGroup) 
-						attachmentGroup.addElement(viE);
+						attachmentGroup.addElement(vContainer);
 				}
 				
 			}
