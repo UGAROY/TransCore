@@ -15,13 +15,13 @@ package com.transcendss.transcore.sld.models.components
 	import flash.utils.Timer;
 	
 	import mx.collections.ArrayCollection;
-	import mx.core.UIComponent;
 	import mx.core.FlexGlobals;
-
+	import mx.core.UIComponent;
+	
 	import spark.components.Image;
 	import spark.primitives.BitmapImage;
 	
-
+	
 	
 	[Bindable]
 	public class Route extends Tippable
@@ -39,10 +39,10 @@ package com.transcendss.transcore.sld.models.components
 		// is for an odd number of lanes.  This was needed because of the way the fill is done so the lanes loook right.
 		[Embed(source="../../../../../../images/RouteImages/MAVRIC Lane Images/01-lane.jpg") ]
 		public var lane_1:Class;
-
+		
 		[Embed(source="../../../../../../images/RouteImages/MAVRIC Lane Images/01-lane-odd.jpg") ]
 		public var lane_1_odd:Class;
-
+		
 		public function Route(rteName:String, bm:Number, em:Number, rteNo:int=0,rteFullName:String="")
 		{
 			super(Tippable.SLD);
@@ -56,7 +56,7 @@ package com.transcendss.transcore.sld.models.components
 			routeDistance = Math.abs(endMile - beginMile);
 			tipText = rteName;
 		}
-			
+		
 		public function draw(diagramWidth:int, diagramHeight:int, rColor:uint = 0x000000,sColor:uint =0xFFF544, offsetValue:Number = 508):void
 		{
 			//clearContainer();  // must clear to draw/redraw
@@ -79,7 +79,7 @@ package com.transcendss.transcore.sld.models.components
 				Vector.<int>([1,2,2,2]),
 				Vector.<Number>([x1,y1, x2,y1, x2,y2, x1,y2]));	
 			routeLine.graphics.endFill();
-
+			
 			this.addChild(routeLine);
 		}		
 		
@@ -112,6 +112,12 @@ package com.transcendss.transcore.sld.models.components
 			var featuresLength:int = 0;
 			var useFeaturesAC:ArrayCollection = new ArrayCollection();
 			
+			var featureType:String = FlexGlobals.topLevelApplication.GlobalComponents.ConfigManager.roadwayLanesEventType;
+			var barElemFrmFieldNm:String = FlexGlobals.topLevelApplication.GlobalComponents.assetManager.getBarElementFromMeasure(featureType);
+			var barElemToFieldNm:String = FlexGlobals.topLevelApplication.GlobalComponents.assetManager.getBarElementToMeasure(featureType);
+			var barElemValFieldNm:String = FlexGlobals.topLevelApplication.GlobalComponents.assetManager.getBarElementValueField(featureType);
+			
+			
 			// Get the array of elements that are to be used, and find the begin/end milepoint for the requested route
 			if(featureAC != null && featureAC[0].hasOwnProperty("DATA") && featureAC[0].DATA.length > 0)
 			{
@@ -120,21 +126,27 @@ package com.transcendss.transcore.sld.models.components
 				// Eliminate any data that has start point > end point
 				for(var j:int=0; j<featuresLength; j++)
 				{
-					if(parseFloat(featureAC[0].DATA[j].REFPT) < parseFloat(featureAC[0].DATA[j].ENDREFPT))
+					if(parseFloat(featureAC[0].DATA[j][barElemFrmFieldNm]) < parseFloat(featureAC[0].DATA[j][barElemToFieldNm]))
 						useFeaturesAC.addItem(featureAC[0].DATA[j]);
 				}
 				
-				featuresLength = useFeaturesAC.length;
-				if(featuresLength>0)
-				{
-				tmpBeginMile = Math.max(useFeaturesAC[0].REFPT,this.beginMile);
-				tmpEndMile = Math.min(useFeaturesAC[featuresLength-1].ENDREFPT, this.endMile);
-				segWidth = Math.round(Converter.scaleMileToPixel(tmpEndMile,scale) - Converter.scaleMileToPixel(tmpBeginMile,scale));
-			
-				}
+				
 			}
+			
+			featuresLength = useFeaturesAC.length;
+			if(featuresLength>0)
+			{
+				useFeaturesAC.source.sortOn(barElemFrmFieldNm);
+				
+				tmpBeginMile = Math.max(useFeaturesAC[0][barElemFrmFieldNm],this.beginMile);
+				tmpEndMile = Math.min(useFeaturesAC[featuresLength-1][barElemToFieldNm], this.endMile);
+				segWidth = Math.round(Converter.scaleMileToPixel(tmpEndMile-tmpBeginMile,scale));
+				
+			}
+			else
+				segWidth = segmentWidth;
 			// Always draw a single roadway as a default to cover the entire route
-			segWidth = segWidth == 0 ? segmentWidth : segWidth;
+			//segWidth = segWidth == 0 ? segmentWidth : segWidth;
 			img = getRoadwayImg(numLanes);
 			rdWidth = img.height;
 			// calculate and store path
@@ -154,11 +166,11 @@ package com.transcendss.transcore.sld.models.components
 			routeLine.graphics.endFill();
 			
 			this.addChild(routeLine);
-
+			
 			// If users have turned off displaying the number of lanes for this route, stop here
 			if(!FlexGlobals.topLevelApplication.GlobalComponents.ConfigManager.roadwayLanesSwitch)
 				return;
-				
+			
 			// If there are specified roadway lanes, then draw those as well
 			if(featureAC != null && featureAC[0].DATA.length > 0)
 			{				
@@ -168,12 +180,12 @@ package com.transcendss.transcore.sld.models.components
 					if(i == 0)
 						startPt = tmpBeginMile;
 					else
-						startPt = useFeaturesAC[i].REFPT;
+						startPt = useFeaturesAC[i][barElemFrmFieldNm];
 					
 					if(i == featuresLength-1)
 						endPt = tmpEndMile;
 					else
-						endPt = useFeaturesAC[i].ENDREFPT;
+						endPt = useFeaturesAC[i][barElemToFieldNm];
 					
 					tmpStart = Converter.scaleMileToPixel(startPt,scale);
 					// If the first number of lanes value does not start at the beginning of the route segment, calculate
@@ -186,7 +198,7 @@ package com.transcendss.transcore.sld.models.components
 					
 					tmpEnd = Converter.scaleMileToPixel(endPt,scale);
 					segWidth = Math.round(tmpEnd - tmpStart);
-					img = getRoadwayImg(useFeaturesAC[i].ELEM_VALUE);
+					img = getRoadwayImg(useFeaturesAC[i][barElemValFieldNm]);
 					yAdjust1 = 0;
 					yAdjust2 = 0;
 					if((numLanes % 2) == 0)
@@ -217,7 +229,7 @@ package com.transcendss.transcore.sld.models.components
 					tmpOffset = x2;
 					if(i < featuresLength-1)
 					{
-						nextStartPt = useFeaturesAC[i+1].REFPT;
+						nextStartPt = useFeaturesAC[i+1][barElemFrmFieldNm];
 						if(endPt != nextStartPt)
 						{
 							tmpx1 = Converter.scaleMileToPixel(endPt, scale);
@@ -250,7 +262,7 @@ package com.transcendss.transcore.sld.models.components
 			
 			return img;
 		}
-
+		
 		public function clearContainer():void{
 			// clear all children of container
 			while (this.numChildren > 0)

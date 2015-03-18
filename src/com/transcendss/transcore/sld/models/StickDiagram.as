@@ -597,7 +597,7 @@ package com.transcendss.transcore.sld.models
 				}
 				catch(e:Error)
 				{
-					trace(ftName + " DONE");
+					trace(ftName + " DONE with error" +e.getStackTrace());
 					FlexGlobals.topLevelApplication.decrementEventStack();
 					FlexGlobals.topLevelApplication.TSSAlert('Error drawing asset: '+ ftName + '. ' + e.message);	
 				}
@@ -705,6 +705,9 @@ package com.transcendss.transcore.sld.models
 				testArray.push(asset.symbol);
 				
 			}
+			
+			if(asset.description =="SUPPORT")
+				asset.symbol.visible = (asset.invProperties["RETIRED"].value!=1);
 			
 			if (assetSprite.centerH)
 			{	
@@ -1162,13 +1165,13 @@ package com.transcendss.transcore.sld.models
 			asset.symbol.selectAsset();
 			asset.symbol.deselectAsset();
 			
+			
+			
 			placeAssetOnMap(asset);
 			dispSprite.addChild(asset.symbol);
 			dispSprite.visible = FlexGlobals.topLevelApplication.GlobalComponents.ConfigManager.assetSwitch[asset.description];
 			if(type =="SIGN")
 				this._signArray.addItem(asset);
-			
-			
 			
 			if(this.cachedAssets.hasOwnProperty(type))
 			{
@@ -1276,7 +1279,7 @@ package com.transcendss.transcore.sld.models
 						var rawAsset2:Object = new Object();
 						for (var prop:String in rawAsset)
 						{
-							rawAsset2[prop.toUpperCase()] = rawAsset[prop];
+							rawAsset2[prop] = rawAsset[prop];
 							//delete rawAsset[prop];
 						}
 						var asset:BaseAsset = assetMan.mapDataToBaseAsset(rawAsset2, obj.Name);
@@ -1332,7 +1335,7 @@ package com.transcendss.transcore.sld.models
 					var rawAsset2:Object = new Object();
 					for (var prop:String in rawAsset)
 					{
-						rawAsset2[prop.toUpperCase()] = rawAsset[prop];
+						rawAsset2[prop] = rawAsset[prop];
 						//delete rawAsset[prop];
 					}
 					var asset:BaseAsset = assetMan.mapDataToBaseAsset(rawAsset2, obj.Name);
@@ -1469,6 +1472,10 @@ package com.transcendss.transcore.sld.models
 						assetSymbol.visible = false;
 					else
 						assetSymbol.visible = false;
+					
+					if(spriteArray.getItemAt(i).description =="SUPPORT")
+						spriteArray.getItemAt(i).symbol.visible = (spriteArray.getItemAt(i).invProperties["RETIRED"].value!=1);
+					
 				
 						//spriteLayer.removeChild(assetSymbol);
 				}

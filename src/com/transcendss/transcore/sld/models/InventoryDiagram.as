@@ -104,46 +104,48 @@ package com.transcendss.transcore.sld.models
 			
 		}
 		
-
-		public function drawElemsFrmSrvceResFaultHandler():void
+		
+		public function drawElemsFrmSrvceResFaultHandler(elementType:String=""):void
 		{
 			elementLoadCount++;
 			var app:Object = FlexGlobals.topLevelApplication;
+			
 			// Draw the roadway lanes for the Stick Panel
+			if(elementType== FlexGlobals.topLevelApplication.GlobalComponents.ConfigManager.roadwayLanesEventType)
+				dispatcher.dispatchEvent(new ElementEvent(ElementEvent.DRAW_ROADWAY_LANES, new ArrayCollection(), this.diagramScale));
 			
 			//if (elementLoadCount == app.GlobalComponents.ConfigManager.dataElementValues.length)
-				app.decrementEventStack();	
+			app.decrementEventStack();	
 		}
 		
 		
 		//draws elements once the service call returns obtaining all the element info
-		public function drawElemsFrmSrvceRes(arrayCollection:ArrayCollection=null, drawnot:Boolean=false):void
+		public function drawElemsFrmSrvceRes(arrayCollection:ArrayCollection=null, drawnot:Boolean=false,elementType:String=""):void
 		{
 			try
 			{
-			if(arrayCollection[0] != null && arrayCollection[0].ATT_NAME != "" && 
-				arrayCollection[0].DATA != null && arrayCollection[0].DATA.length > 0)
-				arrayCollection = mergeLiveAndLocalBarElements(arrayCollection);
-			
-			
-			element = new Element(this.labelLayer);
-			
-			// Draw the roadway lanes for the Stick Panel
-			if(arrayCollection != null && arrayCollection.length > 0 && arrayCollection[0].ATT_NAME == FlexGlobals.topLevelApplication.GlobalComponents.ConfigManager.lanesFieldValue)
-			{
-				dispatcher.dispatchEvent(new ElementEvent(ElementEvent.DRAW_ROADWAY_LANES, arrayCollection, this.diagramScale));
-			}
-			
-			drawElement(arrayCollection, -1,-1,drawnot);
-			elementCount++;
-			drawGuideBar();
-			if(elementCount==element.elementIDNo)
-				dispatcher.dispatchEvent(new ElementEvent(ElementEvent.ELEMENT_LOAD_COMPLETED));
-			
-			var app:Object = FlexGlobals.topLevelApplication;
-			
-			elementLoadCount++;
-			//if (elementLoadCount == app.GlobalComponents.ConfigManager.dataElementValues.length)
+				if(arrayCollection[0] != null && arrayCollection[0].ATT_NAME != "" && 
+					arrayCollection[0].DATA != null && arrayCollection[0].DATA.length > 0)
+					arrayCollection = mergeLiveAndLocalBarElements(arrayCollection);
+				
+				
+				element = new Element(this.labelLayer);
+				
+				// Draw the roadway lanes for the Stick Panel
+				if(elementType== FlexGlobals.topLevelApplication.GlobalComponents.ConfigManager.roadwayLanesEventType)
+					dispatcher.dispatchEvent(new ElementEvent(ElementEvent.DRAW_ROADWAY_LANES, arrayCollection, this.diagramScale));
+				
+				
+				drawElement(arrayCollection, -1,-1,drawnot);
+				elementCount++;
+				drawGuideBar();
+				if(elementCount==element.elementIDNo)
+					dispatcher.dispatchEvent(new ElementEvent(ElementEvent.ELEMENT_LOAD_COMPLETED));
+				
+				var app:Object = FlexGlobals.topLevelApplication;
+				
+				elementLoadCount++;
+				//if (elementLoadCount == app.GlobalComponents.ConfigManager.dataElementValues.length)
 				app.decrementEventStack();	
 			}
 			catch(e:Error)
@@ -164,7 +166,7 @@ package com.transcendss.transcore.sld.models
 			var elemArray2:ArrayCollection = new ArrayCollection();
 			
 			elemArray2 = FlexGlobals.topLevelApplication.GlobalComponents.assetManager.getBarElementsByRoute(type, this.diagramRoute);
-
+			
 			if(elemArray2.length == 0)
 				elemArray2 = new ArrayCollection(elemArray);
 			else
@@ -196,7 +198,7 @@ package com.transcendss.transcore.sld.models
 			ac[0].DATA = arr;
 			return ac;
 		}
-
+		
 		//incase of scale change only draws from store
 		private function drawElemsfrmStore():void
 		{	
@@ -207,13 +209,10 @@ package com.transcendss.transcore.sld.models
 				drawElement(elementColl[i].AC, -1,i);
 				elementCount++;
 				// Draw the roadway lanes for the Stick Panel
-				if(elementColl[i].AC != null && elementColl[i].AC.length > 0 && elementColl[i].AC[0].ATT_NAME == FlexGlobals.topLevelApplication.GlobalComponents.ConfigManager.lanesFieldValue)
-				{
-					dispatcher.dispatchEvent(new ElementEvent(ElementEvent.DRAW_ROADWAY_LANES, elementColl[i].AC, this.diagramScale));
-				}
+				//if(elementColl[i].AC != null && elementColl[i].AC.length > 0 && elementColl[i].AC[0].ATT_NAME == FlexGlobals.topLevelApplication.GlobalComponents.ConfigManager.lanesFieldValue)
 				
 			}
-			
+			drawRoadwayLanesFromStorage();
 			drawGuideBar();
 			var app:Object = FlexGlobals.topLevelApplication;
 			
@@ -226,15 +225,20 @@ package com.transcendss.transcore.sld.models
 		// this method is called.
 		public function drawRoadwayLanesFromStorage():void
 		{
+			var lanesAC:ArrayCollection = new ArrayCollection();
 			// Draw the roadway lanes for the Stick Panel
 			for(var j:int=0; j<elementColl.length; j++)
 			{
-				if(elementColl[j].AC[0] != null && elementColl[j].AC[0].ATT_NAME == FlexGlobals.topLevelApplication.GlobalComponents.ConfigManager.lanesFieldValue)
-				{
-					dispatcher.dispatchEvent(new ElementEvent(ElementEvent.DRAW_ROADWAY_LANES, elementColl[j].AC, this.diagramScale));
-					break;
-				}
+				//if(elementColl[j].AC[0] != null && elementColl[j].AC[0].ATT_NAME == FlexGlobals.topLevelApplication.GlobalComponents.ConfigManager.lanesFieldValue)
+				//				if(elementColl[j].elementType== FlexGlobals.topLevelApplication.GlobalComponents.ConfigManager.roadwayLanesEventType)
+				//				{
+				//					dispatcher.dispatchEvent(new ElementEvent(ElementEvent.DRAW_ROADWAY_LANES, elementColl[j].AC, this.diagramScale));
+				//					break;
+				//				}
+				if(String(elementColl[j].elementObj.elementID)== FlexGlobals.topLevelApplication.GlobalComponents.ConfigManager.roadwayLanesEventType)
+					lanesAC = elementColl[j].AC;
 			}
+			dispatcher.dispatchEvent(new ElementEvent(ElementEvent.DRAW_ROADWAY_LANES,lanesAC , this.diagramScale));
 		}
 		
 		//draw elements to PDF
@@ -319,6 +323,7 @@ package com.transcendss.transcore.sld.models
 					//this.parent.parent.height = height;
 				}
 			}
+			
 			
 		}
 		
@@ -434,7 +439,7 @@ package com.transcendss.transcore.sld.models
 				}
 			}
 		}
-
+		
 		//when an element is clicked go through the element collection and find the element clicked by comparing ID
 		//Display the element text box and button
 		public function displayAttrInput(event:ElementEditEvent, scale:Number, isSplit:Boolean=false):void{
@@ -499,7 +504,7 @@ package com.transcendss.transcore.sld.models
 				}
 			}
 		}
-
+		
 		// Check that the guide mile is on a bar element that can be split
 		private function isElementAtGuideBar(milepoint:Number, index:int):Boolean
 		{
@@ -562,7 +567,7 @@ package com.transcendss.transcore.sld.models
 			var splitX:Number = Converter.scaleMileToPixel(splitMP - diagramRoute.beginMi, diagramScale);
 			FlexGlobals.topLevelApplication.splitElement(this.elementToEdit, splitMP, splitX);
 		}
-				
+		
 		
 		private function removeChildRelatedToSingleElem():void{
 			var elemChildArray:Array = new Array("Element"+AttrObj(FlexGlobals.topLevelApplication.currAttrObj).attrType, "ElemDropDown", "ElemTextBox", "ElemTextBoxBtn");
@@ -670,7 +675,7 @@ package com.transcendss.transcore.sld.models
 					{
 						var bgP:Number = new  Number(dataArr[k].FROMMEASURE);
 						var endP:Number = new Number(dataArr[k].TOMEASURE);
-						if((bgP>=begMile && bgP<= endMile) || (endP >= begMile && endP <=endMile))
+						if((bgP>=begMile && bgP<= endMile) || (endP >= begMile && endP <=endMile)|| isNaN(bgP) || isNaN(endP))
 							newData.push(dataArr[k]);
 						
 					}

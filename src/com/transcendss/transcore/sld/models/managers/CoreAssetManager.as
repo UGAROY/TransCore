@@ -68,16 +68,25 @@ package com.transcendss.transcore.sld.models.managers
 		 * @param responder the methods to be fired upon success or failure
 		 * @return void
 		 */
-		public function requestAssets(type:String,  responder:IResponder):void
+		public function requestAssets(type:String,  responder:IResponder, routep:Route = null):void
 		{
 			FlexGlobals.topLevelApplication.incrementEventStack();
 			_event = new FeatureEvent(FeatureEvent.ASSET_REQUEST, type);
-			_event.routeName = _route.routeName;
-			_event.begMile = _route.beginMi;
-			_event.endMile = _route.endMi;
+			if(!routep)
+			{
+				_event.routeName = _route.routeName;
+				_event.begMile = _route.beginMi;
+				_event.endMile = _route.endMi;
+			}
+			else
+			{
+				_event.routeName = routep.routeName;
+				_event.begMile = routep.beginMi;
+				_event.endMile = routep.endMi;
+			}
 			_event.eventLayerID = _assetDefs[_assetDescriptions[type]].EVENT_LAYER_ID;
 			_event.serviceURL = _app.GlobalComponents.ConfigManager.serviceURL + "XingFeatures/" + type
-				+ "/" + _route.routeName + "/" + _route.beginMi + "/" + _route.endMi;
+				+ "/" + _event.routeName + "/" + _event.begMile + "/" + _event.endMile;
 			_event.responder = responder;
 			_dispatcher.dispatchEvent(_event);
 			_event = null;
@@ -236,7 +245,7 @@ package com.transcendss.transcore.sld.models.managers
 				if (isAsset && temp.inspProperties[prop])
 					temp.inspProperties[prop].value = flag ? data[prop].value : data[prop];
 				if((isAsset && !temp.invProperties[prop] && !temp.inspProperties[prop]) ||
-					(!isAsset && !temp.invProperties[prop]))
+					(!isAsset && !temp.invProperties[prop]) && FlexGlobals.topLevelApplication.TSSEventMap.debugFlag)
 					trace("Warning: A property ('" + prop + "') from an Asset JSON result was not found in its Asset Definition file!");
 			}
 			
@@ -260,7 +269,9 @@ package com.transcendss.transcore.sld.models.managers
 			
 			}
 			
-				
+			if(temp.invProperties.hasOwnProperty(temp.lengthMeasureColName) && !temp.invProperties[temp.lengthMeasureColName].value)
+				temp.invProperties[temp.lengthMeasureColName].value = Number( (Number(data[temp.toMeasureColName])-Number(data[temp.fromMeasureColName])).toFixed(2));
+			
 			
 			//assignAssetSymbol(temp);
 			

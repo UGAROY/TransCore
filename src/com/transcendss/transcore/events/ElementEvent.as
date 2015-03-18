@@ -5,6 +5,7 @@ package com.transcendss.transcore.events
 	import flash.events.Event;
 	
 	import mx.collections.ArrayCollection;
+	import mx.rpc.IResponder;
 	
 	public class ElementEvent extends Event
 	{
@@ -21,6 +22,7 @@ package com.transcendss.transcore.events
 		private var _begMile:Number;
 		private var _endMile:Number;
 		private var _eventLayerID:int;
+		public var responder:IResponder;
 		public var featureAC:ArrayCollection= new ArrayCollection();
 		
 		public function ElementEvent(type:String,elemArrayC:ArrayCollection= null, currScale:Number=-1, bubbles:Boolean=false, cancelable:Boolean=false)
