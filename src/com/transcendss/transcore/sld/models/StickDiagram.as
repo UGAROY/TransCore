@@ -188,7 +188,7 @@ package com.transcendss.transcore.sld.models
 			
 			
 			//draw route Heads Up Display
-			routeHUD.draw(diagramRoute.routeName,diagramRoute.beginMilepost,diagramRoute.endMilepost,screenWidth,height,diagramRoute.beginMi+Converter.scalePixelToMile(_gBarX - offsetValue,diagramScale));
+			routeHUD.draw(diagramRoute.routeFullName||diagramRoute.routeName,diagramRoute.beginMilepost,diagramRoute.endMilepost,screenWidth,height,diagramRoute.beginMi+Converter.scalePixelToMile(_gBarX - offsetValue,diagramScale));
 			layerArray.push({layer:routeHUD, order:999, layerIndex:0});
 			
 			
