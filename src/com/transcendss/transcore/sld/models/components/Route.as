@@ -1,25 +1,15 @@
 package com.transcendss.transcore.sld.models.components
 {
-	import com.transcendss.transcore.util.*;
 	import com.transcendss.transcore.util.Converter;
-	import com.transcendss.transcore.util.Tooltip;
+	import com.transcendss.transcore.util.Tippable;
 	
 	import flash.display.Bitmap;
-	import flash.display.BitmapData;
 	import flash.display.GraphicsPath;
 	import flash.display.IGraphicsData;
 	import flash.display.Shape;
-	import flash.display.Sprite;
-	import flash.events.MouseEvent;
-	import flash.events.TimerEvent;
-	import flash.utils.Timer;
 	
 	import mx.collections.ArrayCollection;
 	import mx.core.FlexGlobals;
-	import mx.core.UIComponent;
-	
-	import spark.components.Image;
-	import spark.primitives.BitmapImage;
 	
 	
 	
@@ -54,7 +44,7 @@ package com.transcendss.transcore.sld.models.components
 			beginMile = bm;
 			endMile = em;
 			routeDistance = Math.abs(endMile - beginMile);
-			tipText = rteName;
+			tipText = rteFullName||rteName;
 		}
 		
 		public function draw(diagramWidth:int, diagramHeight:int, rColor:uint = 0x000000,sColor:uint =0xFFF544, offsetValue:Number = 508):void
