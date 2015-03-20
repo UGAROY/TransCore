@@ -253,7 +253,8 @@ package com.transcendss.transcore.sld.models.managers
 		
 		public function setGeotags(attachmentGroup:Group, gtArray:Array, assetType:String, assetID:String, routeName:String, begMile:Number,assetLocalID:String="", endMile:Number=0, layerID:String=null, inspGroup:Group=null):void
 		{
-			FlexGlobals.topLevelApplication.setBusyStatus(false);
+			FlexGlobals.topLevelApplication.decrementEventStack();
+			// FlexGlobals.topLevelApplication.setBusyStatus(false);
 			if(!gtArray)
 				return;
 			for (var gti:int=0;gti<gtArray.length;gti++)
