@@ -68,12 +68,12 @@ package com.transcendss.transcore.sld.models.managers
 				var tmpImage:TSSPicture = new TSSPicture();
 				tmpImage.geoTag = tmpGT;
 				tmpImage.label = tmpGT.image_file_name;
-				
+				gtURL= FlexGlobals.topLevelApplication.GlobalComponents.ConfigManager.geotagUrl;
 				
 				if(loaderPath == null || loaderPath == "")
 				{
 					//					if (BaseConfigUtility.get("geotags_folder").substr(0,1) == "/")
-					gtURL= FlexGlobals.topLevelApplication.GlobalComponents.ConfigManager.geotagUrl;
+					
 					if (gtURL.substr(0,1) == "/")
 					{
 						loaderPath = "file:///mnt" + gtURL+ tmpGT.image_file_name;
@@ -87,7 +87,12 @@ package com.transcendss.transcore.sld.models.managers
 					}
 				} else if (source == "local")
 				{
-					loaderPath = "file://" + loaderPath + tmpGT.image_file_name;
+					if(FlexGlobals.topLevelApplication.platform == "IOS") {
+						loaderPath = loaderPath + tmpGT.image_file_name;
+					} else {
+						loaderPath = "file://" + loaderPath + tmpGT.image_file_name;
+					}
+					
 				}
 				sourceURL =  loaderPath;
 				
@@ -99,7 +104,7 @@ package com.transcendss.transcore.sld.models.managers
 				tmpImage.width = 40;
 				tmpImage.height = 40;
 				
-				if(doLoad)
+				if(doLoad )
 				{
 					var load:TSSLoader = new TSSLoader();
 					load.picture = tmpImage;
@@ -107,6 +112,7 @@ package com.transcendss.transcore.sld.models.managers
 					
 					load.contentLoaderInfo.addEventListener(Event.COMPLETE, function image_load_complete(event:Event):void
 					{
+						
 						var ldr:TSSLoader = event.target.loader as TSSLoader;
 						var img:Bitmap = event.target.content as Bitmap;
 						var tmpPic:TSSPicture = ldr.picture;
@@ -131,10 +137,11 @@ package com.transcendss.transcore.sld.models.managers
 				sourceURL = loaderPath;
 				else
 				sourceURL = tmpGT.video_file_name;*/
+				gtURL = FlexGlobals.topLevelApplication.GlobalComponents.ConfigManager.geotagUrl;
 				
 				if(loaderPath == null || loaderPath == "")
 				{
-					gtURL = FlexGlobals.topLevelApplication.GlobalComponents.ConfigManager.geotagUrl;
+					
 					if (BaseConfigUtility.get("geotags_folder").substr(0,1) == "/")
 					{
 						loaderPath = "file:///mnt" + gtURL + tmpGT.video_file_name;
@@ -149,9 +156,14 @@ package com.transcendss.transcore.sld.models.managers
 					}
 				} else if (source == "local")
 				{
-					loaderPath = "file://" + loaderPath + tmpGT.video_file_name;
+					if(FlexGlobals.topLevelApplication.platform == "IOS") {
+						loaderPath = loaderPath + tmpGT.video_file_name;
+					} else {
+						loaderPath = "file://" + loaderPath + tmpGT.video_file_name;
+					}
 				}
 				sourceURL = loaderPath;
+				
 				
 				
 				vid.filePath=sourceURL;
@@ -189,6 +201,7 @@ package com.transcendss.transcore.sld.models.managers
 				
 				//				if(source =="server")
 				//					sourceURL = loaderPath;
+				var gtURL2:String = FlexGlobals.topLevelApplication.GlobalComponents.ConfigManager.geotagUrl;
 				if(loaderPath == null || loaderPath == "")
 				{
 					/*if (BaseConfigUtility.get("geotags_folder").substr(0,1) == "/")
@@ -198,7 +211,7 @@ package com.transcendss.transcore.sld.models.managers
 					{
 					loaderPath = BaseConfigUtility.get("geotags_folder");
 					}*/
-					var gtURL2:String = FlexGlobals.topLevelApplication.GlobalComponents.ConfigManager.geotagUrl;
+					
 					if (gtURL2.substr(0,1) == "/")
 					{
 						loaderPath = "file:///mnt" + gtURL2+ tmpGT.voice_file_name;
@@ -214,9 +227,14 @@ package com.transcendss.transcore.sld.models.managers
 					}
 				} else if (source == "local")
 				{
-					loaderPath = "file://" + loaderPath + tmpGT.voice_file_name;					
+					if(FlexGlobals.topLevelApplication.platform == "IOS") {
+						loaderPath = loaderPath + tmpGT.voice_file_name;
+					} else {
+						loaderPath = "file://" + loaderPath + tmpGT.voice_file_name;
+					}				
 				} 
 				sourceURL = loaderPath;
+				//FlexGlobals.topLevelApplication.TSSAlert(loaderPath);
 				//				
 				//				var load2:TSSLoader = new TSSLoader();
 				//				load2.audio = tmpAudio;

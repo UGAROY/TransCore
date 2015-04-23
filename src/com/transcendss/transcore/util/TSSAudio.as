@@ -14,6 +14,7 @@ package com.transcendss.transcore.util
 	import mx.core.FlexGlobals;
 	
 	import spark.components.Image;
+	import spark.components.VGroup;
 	
 	public class TSSAudio extends Image
 	{
@@ -27,7 +28,7 @@ package com.transcendss.transcore.util
 		private var _geoLocalId:String;
 		private var _geoTag:GeoTag;
 		private var _sourceURL:String;
-		
+		public var voiceGroup:VGroup;
 		public function get soundBytes():ByteArray
 		{
 			return _soundBytes;

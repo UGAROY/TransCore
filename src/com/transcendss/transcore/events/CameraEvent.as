@@ -3,10 +3,7 @@ package com.transcendss.transcore.events
 	import com.transcendss.transcore.util.TSSPicture;
 	
 	import flash.display.Bitmap;
-	
 	import flash.events.Event;
-	
-	import mx.collections.ArrayCollection;
 	
 	public class CameraEvent extends Event
 	{

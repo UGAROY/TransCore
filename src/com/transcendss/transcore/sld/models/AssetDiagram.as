@@ -1,8 +1,5 @@
 package com.transcendss.transcore.sld.models
 {
-	import com.google.maps.overlays.GroundOverlay;
-	import com.transcendss.transcore.events.MapOperationEvent;
-	import com.transcendss.transcore.sld.models.components.Culvert;
 	import com.transcendss.transcore.sld.models.components.Route;
 	import com.transcendss.transcore.sld.models.interfaces.IAssetDiagram;
 	import com.transcendss.transcore.util.Converter;
@@ -13,15 +10,11 @@ package com.transcendss.transcore.sld.models
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
-	import mx.controls.Alert;
 	import mx.controls.Spacer;
 	import mx.core.FlexGlobals;
 	import mx.core.IVisualElement;
 	import mx.core.UIComponent;
-	import mx.effects.easing.Back;
-	import mx.events.EffectEvent;
 	import mx.events.PropertyChangeEvent;
-	import mx.graphics.SolidColor;
 	
 	import spark.components.BorderContainer;
 	import spark.components.Button;
@@ -32,11 +25,8 @@ package com.transcendss.transcore.sld.models
 	import spark.components.RadioButtonGroup;
 	import spark.components.RichEditableText;
 	import spark.components.Scroller;
-	import spark.components.VGroup;
-	import spark.core.SpriteVisualElement;
 	import spark.layouts.HorizontalLayout;
 	import spark.layouts.VerticalLayout;
-	import spark.primitives.Rect;
 	
 	//--------------------------------------
 	//  Excluded APIs
@@ -370,18 +360,31 @@ package com.transcendss.transcore.sld.models
 			if (invPanelContent != null && invPanelContent != "map" && invPanelContent != "settings")
 				_invScroller.setStyle("verticalScrollPolicy", "on");
 			invGroup.addElement(content); 
+			
 			//offset
 			
 			_invScroller.viewport = invGroup;
+			var deHL:HorizontalLayout = new HorizontalLayout();
 			if (this.InvPanelContent != "bars") 
 			{
+				
+				deHL.paddingLeft = 0;
+				deHL.paddingRight = 20;
+				
 				content.percentHeight = 100;
 				// For map, set the horizontalScrollPosition to 0
 				// Actually we can remove the scroller for map.
 				// TODO: revisit this
 				invGroup.horizontalScrollPosition = 0;
 			}
-			
+			else
+			{
+				
+				deHL.paddingLeft = 20;
+				deHL.paddingRight = 20;
+				
+			}
+			invGroup.layout = deHL;
 			var bc:BorderContainer = btmPanelContentSelect();
 			if (bc)
 			{
@@ -401,6 +404,8 @@ package com.transcendss.transcore.sld.models
 		
 		protected function btmPanelContentSelect():BorderContainer
 		{
+			if(BaseConfigUtility.getBool("hide_bottom_panel_options"))
+				return null;
 			var hg:HGroup = new HGroup();
 			var label:Label = new Label();
 			label.text = "Panel Content: ";
@@ -408,6 +413,8 @@ package com.transcendss.transcore.sld.models
 			var rg:RadioButtonGroup = new RadioButtonGroup();
 			rg.selectedValue=FlexGlobals.topLevelApplication.GlobalComponents.ConfigManager.invPanelContent;
 			rg.addEventListener(Event.CHANGE, function f(e:Event):void{FlexGlobals.topLevelApplication.GlobalComponents.ConfigManager.invPanelContent=rg.selectedValue;});
+			
+			
 			
 			var rd1:RadioButton = new RadioButton();
 			rd1.value= "form";
@@ -448,6 +455,10 @@ package com.transcendss.transcore.sld.models
 			hg.addElement(rd4);
 			bc.addElement(hg);
 			bc.percentWidth = 100;
+			
+			
+			
+			
 			return bc;
 		}
 		
@@ -580,7 +591,7 @@ package com.transcendss.transcore.sld.models
 			invGroup.percentHeight = 100;
 			
 			var deHL:HorizontalLayout = new HorizontalLayout();
-			deHL.paddingLeft = 20;
+			
 			deHL.paddingRight = 20;
 			invGroup.layout = deHL;
 		}
@@ -1181,18 +1192,18 @@ package com.transcendss.transcore.sld.models
 		 * @param useWeakReference
 		 * 
 		 */
-		override public function addEventListener(type:String, listener:Function, useCapture:Boolean = false, priority:int = 0, useWeakReference:Boolean = false):void
-		{
-			switch(type)
-			{
-				case "indexInViewChanged":
-				case "propertyChange":
-					if (!hasEventListener(type))
-						horizontalLayout.addEventListener(type, redispatchHandler);
-					break;
-			}
-			super.addEventListener(type, listener, useCapture, priority, useWeakReference)
-		}    
+//		override public function addEventListener(type:String, listener:Function, useCapture:Boolean = false, priority:int = 0, useWeakReference:Boolean = false):void
+//		{
+//			switch(type)
+//			{
+//				case "indexInViewChanged":
+//				case "propertyChange":
+//					if (!hasEventListener(type))
+//						horizontalLayout.addEventListener(type, redispatchHandler);
+//					break;
+//			}
+//			super.addEventListener(type, listener, useCapture, priority, useWeakReference)
+//		}    
 		
 		/**
 		 * removes event listener from diagram 
@@ -1201,19 +1212,19 @@ package com.transcendss.transcore.sld.models
 		 * @param useCapture
 		 * 
 		 */
-		override public function removeEventListener(type:String, listener:Function, useCapture:Boolean = false):void
-		{
-			super.removeEventListener(type, listener, useCapture);
-			switch(type)
-			{
-				case "indexInViewChanged":
-				case "propertyChange":
-					if (!hasEventListener(type))
-						horizontalLayout.removeEventListener(type, redispatchHandler);
-					break;
-			}
-		}
-		
+//		override public function removeEventListener(type:String, listener:Function, useCapture:Boolean = false):void
+//		{
+//			super.removeEventListener(type, listener, useCapture);
+//			switch(type)
+//			{
+//				case "indexInViewChanged":
+//				case "propertyChange":
+//					if (!hasEventListener(type))
+//						horizontalLayout.removeEventListener(type, redispatchHandler);
+//					break;
+//			}
+//		}
+//		
 		/**
 		 * Dispatches Events 
 		 * @param event

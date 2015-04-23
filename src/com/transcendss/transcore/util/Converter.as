@@ -149,5 +149,19 @@ package com.transcendss.transcore.util
 			return -1;	
 		}
 		
+		public static function convertStringToURI(str:String):String{
+			if(!str)
+				return "";
+			 
+				return escape(encodeURI(str));  
+			
+		}
+		
+		public static function convertURIToString(str:String):String{
+			if(!str)
+				return "";
+			return unescape(decodeURI(str));  
+			
+		}
 	}
 }

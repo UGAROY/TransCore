@@ -75,7 +75,7 @@ package com.transcendss.transcore.sld.models.managers
 			
 			
 			var mapSR:String = FlexGlobals.topLevelApplication.GlobalComponents.ConfigManager.baseMapSR;
-			if (mapSR == "4623")
+			if (mapSR == "4623" )
 			{
 				// TODO: USE THE NEW ROUTECOORDS structure
 				var pUTM:PolarToUTM = new PolarToUTM();

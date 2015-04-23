@@ -592,31 +592,31 @@ package com.transcendss.transcore.sld.models
 			throw(new Error(resourceManager.getString("components", "layoutReadOnly")));
 		}
 		
-		override public function addEventListener(type:String, listener:Function, useCapture:Boolean = false, priority:int = 0, useWeakReference:Boolean = false):void
-		{
-			switch(type)
-			{
-				case "indexInViewChanged":
-				case "propertyChange":
-					if (!hasEventListener(type))
-						verticalLayout.addEventListener(type, redispatchHandler);
-					break;
-			}
-			super.addEventListener(type, listener, useCapture, priority, useWeakReference)
-		}    
+//		override public function addEventListener(type:String, listener:Function, useCapture:Boolean = false, priority:int = 0, useWeakReference:Boolean = false):void
+//		{
+//			switch(type)
+//			{
+//				case "indexInViewChanged":
+//				case "propertyChange":
+//					if (!hasEventListener(type))
+//						verticalLayout.addEventListener(type, redispatchHandler);
+//					break;
+//			}
+//			super.addEventListener(type, listener, useCapture, priority, useWeakReference)
+//		}    
 		
-		override public function removeEventListener(type:String, listener:Function, useCapture:Boolean = false):void
-		{
-			super.removeEventListener(type, listener, useCapture);
-			switch(type)
-			{
-				case "indexInViewChanged":
-				case "propertyChange":
-					if (!hasEventListener(type))
-						verticalLayout.removeEventListener(type, redispatchHandler);
-					break;
-			}
-		}
+//		override public function removeEventListener(type:String, listener:Function, useCapture:Boolean = false):void
+//		{
+//			super.removeEventListener(type, listener, useCapture);
+//			switch(type)
+//			{
+//				case "indexInViewChanged":
+//				case "propertyChange":
+//					if (!hasEventListener(type))
+//						verticalLayout.removeEventListener(type, redispatchHandler);
+//					break;
+//			}
+//		}
 		
 		private function redispatchHandler(event:Event):void
 		{
